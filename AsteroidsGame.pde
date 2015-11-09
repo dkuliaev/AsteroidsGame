@@ -2,7 +2,7 @@ SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
 public void setup() 
 {
-  size(1000, 1000);
+  size(1000, 800);
   background(0);
   for(int s = 0; s < galaxy.length; s++) { galaxy[s] = new Star(); }
 }
@@ -22,7 +22,7 @@ class Star
   public Star()
   {
     starX = (int)(Math.random() * 1000);
-    starY = (int)(Math.random() * 1000);
+    starY = (int)(Math.random() * 800);
   }
 
   public void show()
