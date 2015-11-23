@@ -148,7 +148,7 @@ class SpaceShip extends Floater
   public void keyPressed()
   {
   
-   if(keyPressed == true && keyCode == DELETE)
+   if(keyPressed == true && keyCode == SHIFT)
     {
       sr71.setX(hyperX);
       sr71.setY(hyperY);
