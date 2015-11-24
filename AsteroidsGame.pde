@@ -1,21 +1,29 @@
 SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
 Asteroid belt[] = new Asteroid[10];
+ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
+
 public void setup() 
 {
   size(1000, 800);
   background(0);
   for(int s = 0; s < galaxy.length; s++) { galaxy[s] = new Star(); }
-  for(int q = 0; q < belt.length; q++) { belt[q] = new Asteroid(); }
+  for(int q = 0; q < 10; q++) { theList.add(new Asteroid());  }
 }
 public void draw() 
 {
   background(0);
   for(int s = 0; s < galaxy.length; s++) { galaxy[s].show(); }
-  for(int q = 0; q < belt.length; q++) { belt[q].show(); belt[q].move();}
+  for(int q = 0; q < theList.size(); q++) 
+  {
+    theList.get(q).show(); 
+    theList.get(q).move();
+    
+  }
   sr71.keyPressed();
   sr71.show();
   sr71.move();
+
 
   
   
