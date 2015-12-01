@@ -1,6 +1,5 @@
 SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
-Asteroid belt[] = new Asteroid[10];
 ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 
 public void setup() 
@@ -17,14 +16,15 @@ public void draw()
   for(int q = 0; q < theList.size(); q++) 
   {
     theList.get(q).show(); 
-    theList.get(q).move();
-    
+    theList.get(q).move();  
   }
   sr71.keyPressed();
   sr71.show();
   sr71.move();
 
-
+  for(int b = 0; b < theList.size(); b++)
+    if(dist(sr71.getX(), sr71.getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
+        theList.remove(b);
   
   
 }
@@ -63,11 +63,10 @@ class Asteroid extends Floater
   {
     setX((int)(Math.random() * 1000));
     setY((int)(Math.random() * 800));
-    setDirectionX((int)(Math.random() * 4 - 2));
-    setDirectionY((int)(Math.random() * 4 - 2));
+    setDirectionX((Math.random() * 4 - 2));
+    setDirectionY((Math.random() * 4 - 2));
     setPointDirection(0);
-    setColor(150);
-    myColor = 255;
+    myColor = 150;
     corners = 12;
     xCorners = new int[corners];
     yCorners = new int[corners];
@@ -97,9 +96,11 @@ class Asteroid extends Floater
     yCorners[11] = -40;
 
   }
+  public int rotationing = (int)((Math.random() * 2) -3);
+  
   public void move()
   {
-    rotate((int)(Math.random() * 2 - 2)); 
+    rotate(rotationing); 
     super.move();
   }
 
