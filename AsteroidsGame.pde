@@ -1,7 +1,8 @@
 SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
 ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
-
+ArrayList <Bullets> theSwarm = new ArrayList <Bullets>();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public void setup() 
 {
   size(1000, 800);
@@ -9,6 +10,7 @@ public void setup()
   for(int s = 0; s < galaxy.length; s++) { galaxy[s] = new Star(); }
   for(int q = 0; q < 10; q++) { theList.add(new Asteroid());  }
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public void draw() 
 {
   background(0);
@@ -16,8 +18,14 @@ public void draw()
   for(int q = 0; q < theList.size(); q++) 
   {
     theList.get(q).show(); 
-    theList.get(q).move();  
+    theList.get(q).move();
   }
+  for(int g = 0; g < theSwarm.size(); g++)
+  {
+    theSwarm.get(g).show();
+    theSwarm.get(g).move();
+  }
+
   sr71.keyPressed();
   sr71.show();
   sr71.move();
@@ -25,9 +33,13 @@ public void draw()
   for(int b = 0; b < theList.size(); b++)
     if(dist(sr71.getX(), sr71.getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
         theList.remove(b);
-  
-  
+
+  if(mousePressed == true)
+  {
+    theSwarm.add(new Bullets(sr71));
+  }
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Star
 {
   private int starX, starY;
@@ -44,6 +56,45 @@ class Star
     ellipse(starX, starY, 3, 3);
   }
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Bullets extends Floater
+{
+  public void setX(int x){myCenterX = x;}
+  public int getX(){return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}   
+  public int getY(){return (int)myCenterY;}
+  public void setColor(int x){myColor = x;}
+  public int getColor(){return (int)myColor;}
+  public void setDirectionX(double x){myDirectionX = x;}   
+  public double getDirectionX(){return myDirectionX;}   
+  public void setDirectionY(double y){myDirectionY = y;} 
+  public double getDirectionY(){return myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;} 
+  public double getPointDirection(){return myPointDirection;}
+
+ public Bullets(SpaceShip sr71)
+ {
+  setX(sr71.getX());
+  setY(sr71.getY());
+  double dRadians = sr71.getPointDirection() * (Math.PI/180);
+  setPointDirection((int)sr71.getPointDirection());
+  setDirectionX(5 * Math.cos(dRadians) + sr71.getX());
+  setDirectionY(5 * Math.sin(dRadians) + sr71.getY());
+ }
+
+ public void show()
+ {
+  fill(255, 0, 0);
+  ellipse((int)myCenterX, (int)myCenterY, 5, 5);
+ }
+ public void move()
+ {
+  myCenterX += sr71.getX();    
+  myCenterY += sr71.getY();     
+ }
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Asteroid extends Floater
 {
   public void setX(int x){myCenterX = x;}
@@ -94,7 +145,6 @@ class Asteroid extends Floater
     yCorners[10] = -50;
     xCorners[11] = 10;
     yCorners[11] = -40;
-
   }
   public int rotationing = (int)((Math.random() * 2) -3);
   
@@ -103,9 +153,8 @@ class Asteroid extends Floater
     rotate(rotationing); 
     super.move();
   }
-
-
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SpaceShip extends Floater  
 {   
   public void setX(int x){myCenterX = x;}
@@ -191,7 +240,7 @@ class SpaceShip extends Floater
   }
  
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
