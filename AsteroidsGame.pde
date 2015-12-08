@@ -2,6 +2,8 @@ SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
 ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 ArrayList <Bullets> theSwarm = new ArrayList <Bullets>();
+boolean shooting = false;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public void setup() 
 {
@@ -34,11 +36,18 @@ public void draw()
     if(dist(sr71.getX(), sr71.getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
         theList.remove(b);
 
-  if(mousePressed == true)
-  {
-    theSwarm.add(new Bullets(sr71));
-  }
+
 }
+
+public void keyPressed() 
+  {
+    if(key == 'o'){ theSwarm.add(new Bullets(sr71));}
+  }
+
+public void keyReleased() 
+  {
+   //if(key == 'o'){ shooting = false;}
+  }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Star
 {
@@ -85,12 +94,12 @@ class Bullets extends Floater
  public void show()
  {
   fill(255, 0, 0);
-  ellipse((int)myCenterX, (int)myCenterY, 5, 5);
+  ellipse((int)myCenterX, (int)myCenterY, 50, 50);
  }
  public void move()
  {
-  myCenterX += sr71.getX();    
-  myCenterY += sr71.getY();     
+  myCenterX += sr71.getDirectionX();    
+  myCenterY += sr71.getDirectionY();     
  }
 
 }
