@@ -2,7 +2,9 @@ SpaceShip sr71 = new SpaceShip();
 Star galaxy[] = new Star[100];
 ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 ArrayList <Bullets> theSwarm = new ArrayList <Bullets>();
-boolean shooting = false;
+public boolean shooting = false;
+public boolean gameOver = false;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public void setup() 
@@ -34,7 +36,30 @@ public void draw()
 
   for(int b = 0; b < theList.size(); b++)
     if(dist(sr71.getX(), sr71.getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
+        gameOver = true;
+
+  for(int b = 0; b < theList.size(); b++)
+  {
+    for(int p = 0; p < theSwarm.size(); p++)
+    {
+      if(dist(theSwarm.get(p).getX(), theSwarm.get(p).getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
+      {
         theList.remove(b);
+        break;
+      }
+    }
+  
+  if(theList.size() < 10)
+    theList.add(new Asteroid());
+  }
+    
+
+  if(gameOver == true)
+  {
+    fill(255);
+    textSize(100);
+    text("Game Over", 200, 400);
+  }
 
 
 }
@@ -42,11 +67,12 @@ public void draw()
 public void keyPressed() 
   {
     if(key == 'o'){ theSwarm.add(new Bullets(sr71));}
+    if(key == ' '){ gameOver = false;}
   }
 
 public void keyReleased() 
   {
-   //if(key == 'o'){ shooting = false;}
+
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Star
@@ -62,6 +88,7 @@ class Star
   public void show()
   {
     fill(255);
+    noStroke();
     ellipse(starX, starY, 3, 3);
   }
 }
@@ -80,26 +107,28 @@ class Bullets extends Floater
   public double getDirectionY(){return myDirectionY;}
   public void setPointDirection(int degrees){myPointDirection = degrees;} 
   public double getPointDirection(){return myPointDirection;}
+  public double dRadians;
 
- public Bullets(SpaceShip sr71)
+ public Bullets(SpaceShip theShip)
  {
-  setX(sr71.getX());
-  setY(sr71.getY());
-  double dRadians = sr71.getPointDirection() * (Math.PI/180);
-  setPointDirection((int)sr71.getPointDirection());
-  setDirectionX(5 * Math.cos(dRadians) + sr71.getX());
-  setDirectionY(5 * Math.sin(dRadians) + sr71.getY());
+  myCenterX = theShip.getX();
+  myCenterY = theShip.getY();
+  myPointDirection = theShip.getPointDirection();
+  dRadians = myPointDirection*(Math.PI/180);
+  myDirectionX = 5*Math.cos(dRadians) + theShip.getDirectionX();
+  myDirectionY = 5*Math.sin(dRadians) + theShip.getDirectionY();
  }
 
  public void show()
  {
+  noStroke();
   fill(255, 0, 0);
-  ellipse((int)myCenterX, (int)myCenterY, 50, 50);
+  ellipse((int)myCenterX, (int)myCenterY, 5, 5);
  }
  public void move()
  {
-  myCenterX += sr71.getDirectionX();    
-  myCenterY += sr71.getDirectionY();     
+  myCenterX += myDirectionX;
+  myCenterY += myDirectionY;
  }
 
 }
@@ -122,7 +151,7 @@ class Asteroid extends Floater
   public Asteroid()
   {
     setX((int)(Math.random() * 1000));
-    setY((int)(Math.random() * 800));
+    setY((int)(Math.random() * 500));
     setDirectionX((Math.random() * 4 - 2));
     setDirectionY((Math.random() * 4 - 2));
     setPointDirection(0);
@@ -183,14 +212,14 @@ class SpaceShip extends Floater
   public SpaceShip()
   {
     setX(500);
-    setY(500);
+    setY(600);
     setDirectionX(0);
     setDirectionY(0);
     setPointDirection(270);
     hyperX = (int)(Math.random() * 500 + 250);
     hyperY = (int)(Math.random() * 500 + 250);
     hyperPoint = (int)(Math.random() * 360);
-    myColor = 255;
+    myColor = color(150, 150, 0);
     corners = 8;
     xCorners = new int[corners];
     yCorners = new int[corners];
