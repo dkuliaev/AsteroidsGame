@@ -4,6 +4,12 @@ ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 ArrayList <Bullets> theSwarm = new ArrayList <Bullets>();
 public boolean shooting = false;
 public boolean gameOver = false;
+public boolean wKey = false;
+public boolean dKey = false;
+public boolean aKey = false;
+public boolean sKey = false;
+public boolean hyperKey = false;
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,9 +36,21 @@ public void draw()
     theSwarm.get(g).move();
   }
 
-  sr71.keyPressed();
   sr71.show();
   sr71.move();
+
+  if(wKey == true){sr71.accelerate(0.075);}
+  if(dKey == true){sr71.rotate(5);}
+  if(aKey == true){sr71.rotate(-5);}
+  if(sKey == true){sr71.accelerate(-0.075);}
+  if(hyperKey == true)
+  {
+    sr71.setX(500);
+    sr71.setY(600);
+    sr71.setDirectionX(0);
+    sr71.setDirectionY(0);
+    sr71.setPointDirection(90);
+  }
 
   for(int b = 0; b < theList.size(); b++)
     if(dist(sr71.getX(), sr71.getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
@@ -68,11 +86,20 @@ public void keyPressed()
   {
     if(key == 'o'){ theSwarm.add(new Bullets(sr71));}
     if(key == ' '){ gameOver = false;}
+    if(key == 'w' || key == 'W'){ wKey = true;}
+    if(key == 'd'){ dKey = true;}
+    if(key == 'a'){ aKey = true;}
+    if(key == 's'){ sKey = true;}
+    if(key == 'c'){ hyperKey = true;}
   }
 
 public void keyReleased() 
   {
-
+    if(key == 'w'){ wKey = false;}
+    if(key == 'd'){ dKey = false;}
+    if(key == 'a'){ aKey = false;}
+    if(key == 's'){ sKey = false;}
+    if(key == 'c'){ hyperKey = false;}
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Star
@@ -239,42 +266,6 @@ class SpaceShip extends Floater
     yCorners[6] = -8*2;
     xCorners[7] = -6*2;
     yCorners[7] = -12*2; 
-  }
-  
-  public void keyPressed()
-  {
-  
-   if(keyPressed == true && keyCode == SHIFT)
-    {
-      sr71.setX(hyperX);
-      sr71.setY(hyperY);
-      sr71.setPointDirection(hyperPoint);
-      sr71.setDirectionX(0);
-      sr71.setDirectionY(0);
-    }
-  else
-   {
-      hyperX = (int)(Math.random() * 500 + 250);
-      hyperY = (int)(Math.random() * 500 + 250);
-      hyperPoint = (int)(Math.random() * 360);
-   }
-  if(keyPressed == true && keyCode == UP)
-    {
-      sr71.accelerate(0.075);
-
-    }
-  if(keyPressed == true && keyCode == LEFT)
-    {
-     sr71.rotate(-5);
-    }
-  if(keyPressed == true && keyCode == RIGHT)
-    {
-     sr71.rotate(5);
-    }
-  if(keyPressed == true && keyCode == DOWN)
-  {
-    sr71.accelerate(-0.050);
-  }
   }
  
 }
