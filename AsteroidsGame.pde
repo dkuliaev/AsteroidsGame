@@ -70,7 +70,7 @@ public void draw()
     }
     for(int i = 0; i < theSwarm.size(); i++)
     {
-      if(dist(sr71.getX(), sr71.getY(), theSwarm.get(i).getX(), theSwarm.get(i).getY()) < 10)
+      if(dist(sr71.getX(), sr71.getY(), theSwarm.get(i).getX(), theSwarm.get(i).getY()) < 5)
       {
         gameOver = true;
         theSwarm.remove(i);
@@ -105,7 +105,7 @@ public void draw()
 public void keyPressed() 
   {
     if(key == ' '){ theSwarm.add(new Bullets(sr71)); score -= 0.2;}
-    if(key == 'r'){ gameOver = false; theList.add(new Asteroid()); score = 0; }
+    if(key == 'r'){ gameOver = false; theList.add(new Asteroid()); score = 0; suicide = false;}
     if(key == 'w' || key == 'W'){ wKey = true;}
     if(key == 'd' || key == 'D'){ dKey = true;}
     if(key == 'a' || key == 'A'){ aKey = true;}
