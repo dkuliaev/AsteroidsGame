@@ -70,7 +70,7 @@ public void draw()
     }
     for(int i = 0; i < theSwarm.size(); i++)
     {
-      if(dist(sr71.getX(), sr71.getY(), theSwarm.get(i).getX(), theSwarm.get(i).getY()) < 5)
+      if(dist(sr71.getX(), sr71.getY(), theSwarm.get(i).getX(), theSwarm.get(i).getY()) < 20)
       {
         gameOver = true;
         theSwarm.remove(i);
