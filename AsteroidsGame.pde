@@ -3,14 +3,14 @@ Star galaxy[] = new Star[100];
 ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 ArrayList <Bullets> theSwarm = new ArrayList <Bullets>();
 public boolean shooting = false;
-public boolean gameOver = false;
+public boolean gameOver = true;
 public boolean wKey = false;
 public boolean dKey = false;
 public boolean aKey = false;
 public boolean sKey = false;
 public boolean hyperKey = false;
-
-
+public double score = 0;
+public boolean suicide = false;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public void setup() 
@@ -60,14 +60,24 @@ public void draw()
   {
     for(int p = 0; p < theSwarm.size(); p++)
     {
-      if(dist(theSwarm.get(p).getX(), theSwarm.get(p).getY(), theList.get(b).getX(), theList.get(b).getY()) < 70)
+      if(dist(theSwarm.get(p).getX(), theSwarm.get(p).getY(), theList.get(b).getX(), theList.get(b).getY()) < 50)
       {
         theList.remove(b);
+        theSwarm.remove(p);
+        score++;
         break;
       }
     }
-  
-  if(theList.size() < 10)
+    for(int i = 0; i < theSwarm.size(); i++)
+    {
+      if(dist(sr71.getX(), sr71.getY(), theSwarm.get(i).getX(), theSwarm.get(i).getY()) < 5)
+      {
+        gameOver = true;
+        theSwarm.remove(i);
+        suicide = true;
+      }
+    }
+  if(theList.size() < 10 && gameOver == false)
     theList.add(new Asteroid());
   }
     
@@ -77,29 +87,39 @@ public void draw()
     fill(255);
     textSize(100);
     text("Game Over", 200, 400);
+    textSize(50);
+    text("Final Score: " + (int)score, 340, 500);
+    for(int i = 0; i < theList.size(); i++){theList.remove(i); }
+    for(int i = 0; i < theSwarm.size(); i++){theSwarm.remove(i);}
+    if(suicide == true) { textSize(25); text("You hit your own ship", 350, 600);}
   }
-
-
+  
+  if(gameOver == false)
+  {
+  fill(255);
+  textSize(20);
+  text("SCORE: " + (int)score, 50, 50);
+  }
 }
 
 public void keyPressed() 
   {
-    if(key == 'o'){ theSwarm.add(new Bullets(sr71));}
-    if(key == ' '){ gameOver = false;}
+    if(key == ' '){ theSwarm.add(new Bullets(sr71)); score -= 0.2;}
+    if(key == 'r'){ gameOver = false; theList.add(new Asteroid()); score = 0; }
     if(key == 'w' || key == 'W'){ wKey = true;}
-    if(key == 'd'){ dKey = true;}
-    if(key == 'a'){ aKey = true;}
-    if(key == 's'){ sKey = true;}
-    if(key == 'c'){ hyperKey = true;}
+    if(key == 'd' || key == 'D'){ dKey = true;}
+    if(key == 'a' || key == 'A'){ aKey = true;}
+    if(key == 's' || key == 'S'){ sKey = true;}
+    if(key == 'c' || key == 'C'){ hyperKey = true;}
   }
 
 public void keyReleased() 
   {
-    if(key == 'w'){ wKey = false;}
-    if(key == 'd'){ dKey = false;}
-    if(key == 'a'){ aKey = false;}
-    if(key == 's'){ sKey = false;}
-    if(key == 'c'){ hyperKey = false;}
+    if(key == 'w' || key == 'W'){ wKey = false;}
+    if(key == 'd' || key == 'D'){ dKey = false;}
+    if(key == 'a' || key == 'A'){ aKey = false;}
+    if(key == 's' || key == 'S'){ sKey = false;}
+    if(key == 'c' || key == 'C'){ hyperKey = false;}
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Star
@@ -150,12 +170,13 @@ class Bullets extends Floater
  {
   noStroke();
   fill(255, 0, 0);
-  ellipse((int)myCenterX, (int)myCenterY, 5, 5);
+  ellipse((float)myCenterX, (float)myCenterY, 5, 5);
  }
  public void move()
  {
   myCenterX += myDirectionX;
   myCenterY += myDirectionY;
+  super.move();
  }
 
 }
@@ -177,7 +198,8 @@ class Asteroid extends Floater
 
   public Asteroid()
   {
-    setX((int)(Math.random() * 1000));
+    if(sr71.getX() < 500){ setX((int)(Math.random() * 500 + 500));}
+    if(sr71.getX() > 500){ setX((int)(Math.random() * 500));}
     setY((int)(Math.random() * 500));
     setDirectionX((Math.random() * 4 - 2));
     setDirectionY((Math.random() * 4 - 2));
